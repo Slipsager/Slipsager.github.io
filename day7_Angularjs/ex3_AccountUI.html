@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<script src="angular.min.js"></script>
+</head>
+
+<body>
+  <h2>Simple Angular.js based Account with Account prototype (class)
+    in AccountController.js</h2>
+<div ng-app="" ng-controller="AccountController">
+  <form novalidate>
+    Type:<br>
+    <input type="text" ng-model="accountType"><br>
+    Owner:<br>
+    <input type="text" ng-model="owner">
+    <br><br>
+
+    <button ng-click="insert(100)">Insert 100</button>
+    <button ng-click="withdraw(50)">Withdraw 50</button>
+    <button ng-click="getSaldo()">Get Saldo</button>
+    <button ng-click="getTransactions()">Get Transactions</button>
+
+  </form>
+
+<ul>
+    <li ng-repeat="x in message">
+      {{ x }}
+    </li>
+  </ul>
+
+
+
+
+</div>
+
+<script src="AccountController.js">
+</script>
+
+</body>
+</html>
