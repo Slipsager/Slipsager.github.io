@@ -1,0 +1,232 @@
+<?php
+
+  /**
+   * Implements hook_block_info().
+   *
+   * Declares a block to provide to Drupal. This can also specify block
+   * configuration settings, like here where the cache is determined be the
+   * user role.
+   *
+   * @url: https://api.drupal.org/api/drupal/modules!block!block.api.php/function/hook_block_info/7
+   */
+  function weather_block_info() {
+    $blocks['weather'] = array(
+      'info' => t('Weather info'),
+      'cache' => DRUPAL_CACHE_PER_ROLE,
+    );
+
+    return $blocks;
+  }
+
+	 /**
+   * Implements hook_help().
+   *
+   * You can add documentation and help here (in admin/help#espn_news). This
+   * documentation can help the users use and extend you module.
+   *
+   * @url: https://api.drupal.org/api/drupal/modules!help!help.api.php/function/hook_help/7
+   */
+  function weather_help($path, $arg) {
+    switch ($path) {
+      case 'admin/setting/weather':
+        return t('This module displays a block which shows a list recent weather news.');
+
+      case 'admin/help#weather';
+        $output = '<h2>' . t('About') . '</h2>';
+        $output .= '<p>' . t('Displays recent weather news from open weather map.') . '</p>';
+        $output .= '<p>' . t('The weather is fetched with open REST API.') . '</p>';
+        return $output;
+    }
+
+	}
+
+  /**
+   * Implements hook_block_view().
+   *
+   * Creates content for our block. It sets the title for the block, and returns
+   * our news (from our custom callback) as a ul-list, with the id 'espn-news'.
+   *
+   * @url: https://api.drupal.org/api/drupal/modules!block!block.api.php/function/hook_block_view/7
+   */
+  function weather_block_view($delta = '') {
+    $block = array();
+
+    switch ($delta) {
+      case 'weather':
+        // List attributes.
+        $attributes = array(
+          'id' => 'weather',
+        );
+
+        // Set block title.
+        $block['subject'] = t('weather');
+
+        //testing testing
+        //$block['content'] = 'hello Bjarne'.variable_get('espn_news_limit');
+
+        // Get content from API.
+        $items = weather_api_content();
+
+        // Print list.
+
+
+        $block['content'] = theme('item_list', array(
+          'items' => $items,
+          'type' => 'ul',
+          'attributes' => array(
+            'id' => 'weather',
+          ),
+        ));
+
+    }
+
+    return $block;
+  }
+
+
+    /**
+   * Implements hook_menu().
+   *
+   * Defines paths to provide page callbacks and menu items for the site.
+   * Here it defines a configuration page with callback to a form, we'll
+   * create later on.
+   *
+   * @url: https://api.drupal.org/api/drupal/modules!system!system.api.php/function/hook_menu/7
+   */
+
+  function weather_menu() {
+    $items = array();
+
+    // Module configuration page.
+    $items['admin/config/content/weather'] = array(
+      'title' => 'Weather info module',
+      'description' => 'Configuration for Weather module',
+      'page callback' => 'drupal_get_form',
+      'page arguments' => array('weather_form'),
+      'access arguments' => array('administer site configuration'),
+      'type' => MENU_NORMAL_ITEM,
+    );
+
+    return $items;
+  }
+
+   /**
+   * Implements hook_form().
+   *
+   * Creates a configuration form. See the API reference for info on different
+   * form inputs.
+   *
+   * From API Reference: https://api.drupal.org/api/drupal/developer!topics!forms_api_reference.html/7
+   *
+   * @url: https://api.drupal.org/api/drupal/modules!node!node.api.php/function/hook_form/7
+   */
+  function weather_form($form, &$form_state) {
+    // Fieldset.
+    $form['weather_api'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('ESPN API'),
+      '#weight' => 0,
+      '#collapsible' => TRUE,
+      '#collapsed' => FALSE,
+    );
+    // Textfield for API key.
+    $form['weather_api']['weather_api_key'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Enter the weather API key (APPID)'),
+      '#default_value' => variable_get('weather_api_key'),
+      '#size' => 40,
+      '#maxlength' => 40,
+      '#description' => t('get you APPID on http://openweathermap.org/signin'),
+      '#required' => TRUE,
+    );
+
+    // Textfield for limit.
+
+    $form['weather_api']['weather_city'] = array(
+     '#type' => 'textfield',
+     '#title' => t('City'),
+     '#default_value' => variable_get('weather_city', 'odense'),
+     '#size' => 20,
+     '#maxlength' => 20,
+     '#description' => t('Weather for which City?'),
+     '#required' => TRUE,
+
+    );
+
+    return system_settings_form($form);
+  }
+
+  /**
+   * Custom API content callback.
+   *
+   * This callback is a custom callback to get ESPN news data.
+   * Here we request the data, preprocesses it and creates a list of news. The
+   * array '$items' contains all the news, we'll display it as a unordered list
+   * later on.
+   *
+   * drupal_http_request: https://api.drupal.org/api/drupal/includes!common.inc/function/drupal_http_request/7
+   * drupal_json_decode: https://api.drupal.org/api/drupal/includes!common.inc/function/drupal_json_decode/7
+   */
+  function weather_api_content() {
+
+    $api_url = 'http://api.openweathermap.org/data/2.5/find';
+    // Query parameters.
+    $query = $api_url .'?q='. variable_get('weather_city') . '&?APPID=' . variable_get('weather_api_key') .
+     '&units=metric';
+
+     /* debugging devel tools for Drupal *****
+     dpm('weather_city = '.variable_get('weather_city') );
+     dpm('weather_api_key = '.variable_get('weather_api_key') );
+     dpm('query = '.$query);
+     */
+
+    // Test queries *****
+    // $query = 'https://www.reddit.com/r/cat.json?limit=5';
+    //$query = 'http://api.openweathermap.org/data/2.5/find?q=Odense&APPID=775d29c4bd38c8cd1b676d5acc14321f&units=metric';
+
+
+    // Query options.
+    $options = array(
+      'method' => 'GET',
+      'timeout' => 5,
+      'headers' => array(
+        'Content-Type' => 'application/json; charset=utf-8',
+      ),
+    );
+
+    // Request data.
+    $request = drupal_http_request($query);
+
+    // Convert data into associative array.
+    $result = drupal_json_decode($request->data);
+
+    // Loop through news.
+    //foreach($result['list'] as $news) {
+
+    //devel testing function ******
+    //dprint_r($result);
+
+
+    $city = $result['list'][0]['name'];
+    $city_temp = $result['list'][0]['main']['temp'];
+    $city_weather = $result['list'][0]['wind']['speed'];
+    $city_sky = $result['list'][0]['weather'][0]['main'];
+
+      // Process data.
+
+
+      // Create li item with content.
+      $items[] = array(
+          'data' => '<h3 class="headline">In ' . $city. '</h3>' .
+          '<span class="datetime">Temperatur= ' . $city_temp . ' C</span>' .
+          '<div class="teaser"><p>Wind=' . $city_weather . '</p></div>' .
+          '<div class="description"><p>Sky: '.$city_sky. '</p></div>',
+
+      );
+
+
+
+    //}
+
+    return $items;
+ }

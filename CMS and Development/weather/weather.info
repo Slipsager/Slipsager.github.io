@@ -1,0 +1,8 @@
+name = weather
+description = Provides a block with weather news.
+
+core = 7.x
+package = Custom
+
+; Link to configuration page, set in weather_news.module: weather_news_menu()
+configure = admin/config/content/weather
