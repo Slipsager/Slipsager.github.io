@@ -1,5 +1,5 @@
 /* Controller for a Angular app  */
-
+var app = angular.module('myApp', []);
 //Constructor function with parameter, properties and methods
 function AccountController($scope) {
   //properties
