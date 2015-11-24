@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<script src="angular.min.js"></script>
+</head>
+
+<body>
+
+<div ng-app="" ng-controller="personController">
+
+First Name: <input type="text" ng-model="firstName"><br>
+Last Name: <input type="text" ng-model="lastName"><br>
+<br>
+Full Name: {{fullName()}}
+
+</div>
+
+<script>
+function personController($scope) {
+    // properties
+    $scope.firstName = "John",
+    $scope.lastName = "Doe",
+
+    // method
+    $scope.fullName = function() {
+        return $scope.firstName + " " + $scope.lastName;
+    }
+}
+</script>
+
+</body>
+</html>
