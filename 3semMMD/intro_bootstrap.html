@@ -6,11 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
   <style>
-    /* custom css */
+    /* custom css that overrights bootstrap css */
 
     /* Remove the jumbotron's default bottom margin */
     .jumbotron {
@@ -30,6 +28,20 @@
       color: white;
       padding: 15px;
     }
+    .navbar-brand{
+      height: 150px;
+    }
+    .navbar-nav {
+      margin-top: 100px;
+    }
+
+    @media only screen and (max-width: 768px) {
+    .navbar-nav {
+        margin-top: 0px;
+    }
+}
+Try it Yourself »
+
 
 
   </style>
@@ -37,14 +49,14 @@
 
 <body>
 
-<main class="container">
 
-  <nav class="navbar">
-    <div class="container-fluid">
+
+  <nav class="navbar navbar-inverse">
+    <div class="container">
       <div class="navbar-header">
-        <a class="navbar-brand" href="#">Logo</a>
+        <a class="navbar-brand" href="#"> <img src="https://placehold.it/150x120?text=IMAGE" class="img-responsive" style="width:100%" alt="Image"></a>
       </div>
-      <ul class="nav navbar-nav navbar-right">
+      <ul class="nav navbar-nav navbar-right navbar">
         <li class="active"><a href="#">Home</a></li>
         <li><a href="#">Page 1</a></li>
         <li><a href="#">Page 2</a></li>
@@ -91,6 +103,8 @@
   <p>Footer Text</p>
 </footer>
 
-</main>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
 </body>
 </html>
