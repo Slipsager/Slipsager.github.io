@@ -7,8 +7,9 @@
 
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
+
   <style>
-    /* custom css that overrights bootstrap css */
+    /* custom css */
 
     /* Remove the jumbotron's default bottom margin */
     .jumbotron {
@@ -28,20 +29,18 @@
       color: white;
       padding: 15px;
     }
-    .navbar-brand{
-      height: 150px;
-    }
-    .navbar-nav {
-      margin-top: 0px;
-    }
 
-    @media only screen and (max-width: 768px) {
-    .navbar-nav {
-        margin-top: 0px;
-    }
+    #panel, #flip {
+    padding: 5px;
+    text-align: center;
+    background-color: #e5eecc;
+    border: solid 1px #c3c3c3;
 }
-Try it Yourself »
 
+    #panel {
+    padding: 50px;
+    display: none;
+}
 
 
   </style>
@@ -49,14 +48,14 @@ Try it Yourself »
 
 <body>
 
+<main class="container">
 
-
-  <nav class="navbar navbar-inverse">
-    <div class="container">
-      <div class="navbar-header navbar-">
-        <a class="navbar-brand" href="#"> <img src="https://placehold.it/150x120?text=IMAGE" class="img-responsive" style="width:100%" alt="Image"></a>
+  <nav class="navbar">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#">Logo</a>
       </div>
-      <ul class="nav navbar-nav navbar-right navbar">
+      <ul class="nav navbar-nav navbar-right">
         <li class="active"><a href="#">Home</a></li>
         <li><a href="#">Page 1</a></li>
         <li><a href="#">Page 2</a></li>
@@ -69,17 +68,33 @@ Try it Yourself »
 <section class="row">
   <div class="jumbotron">
     <div class="container text-center">
-      <h1>Online Store</h1>
+      <h1>3 column layout</h1>
       <p>Mission, Vission & Values</p>
     </div>
   </div>
 </section>
 
 <div class="row">
-  <section class="col-sm-9">
+  <aside class="col-sm-2">
+    <p><a href="#">Link</a></p>
+    <p><a href="#">Link</a></p>
+    <p><a href="#">Link</a></p>
+
+  </aside>
+
+  <section class="col-sm-7">
     <h1>Project Description</h1>
     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae. Sed dui lorem, adipiscing in adipiscing et, interdum nec metus. Mauris ultricies, justo eu convallis placerat, felis enim.
     </p>
+    <div id="flip">Click to slide down video panel</div>
+    <div id="panel">
+      <video width="320" height="240" autoplay>
+  <source src="movie.mp4" type="video/mp4">
+  <source src="movie.ogg" type="video/ogg">
+  Your browser does not support the video tag.
+</video>
+
+    </div>
     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae. Sed dui lorem, adipiscing in adipiscing et, interdum nec metus. Mauris ultricies, justo eu convallis placerat, felis enim.
     </p>
     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae. Sed dui lorem, adipiscing in adipiscing et, interdum nec metus. Mauris ultricies, justo eu convallis placerat, felis enim.
@@ -103,8 +118,27 @@ Try it Yourself »
   <p>Footer Text</p>
 </footer>
 
+</main>
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script>
+$(document).ready(function(){
+  $("aside").on("click", function(){
+    // hide aside elements
+    $("aside").hide();
+  });
+  $("footer").on("click", function(){
+    // show aside elements
+    $("aside").show();
+  })
 
+  $("#flip").click(function(){
+        $("#panel").slideToggle("slow");
+    });
+
+
+})
+</script>
 </body>
 </html>
